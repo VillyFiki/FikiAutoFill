@@ -1,5 +1,4 @@
-﻿using Com.StellmanGreene.CSVReader;
-using DocAutoFill.DataTableConvert;
+﻿using DocAutoFill.DataTableConvert;
 using DocAutoFill.DocAutoFiller;
 using DocAutoFill.Readers;
 using Microsoft.Win32;

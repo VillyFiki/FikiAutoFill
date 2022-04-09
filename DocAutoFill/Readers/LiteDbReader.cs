@@ -1,5 +1,4 @@
-﻿using Com.StellmanGreene.CSVReader;
-using DocAutoFill.DataTableConvert;
+﻿using DocAutoFill.DataTableConvert;
 using LiteDB;
 using System;
 using System.Collections.Generic;
