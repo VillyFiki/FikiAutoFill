@@ -62,11 +62,33 @@
 
                     <GroupBox Grid.Column="1" Margin="5 0 2 5" Header="Output" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Margin="5 5 0 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Directory"/>
+                                
+                                <Grid Margin="5 0 0 0" Grid.Column="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBox Grid.Column="0" Text="{Binding Settings.OutputDir}" />
+                                    <Button Margin="2 0 0 0" Width="20" Grid.Column="1" Content="..." Command="{Binding ChangeOutputDirectoryCommand}"/>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </GroupBox>
 

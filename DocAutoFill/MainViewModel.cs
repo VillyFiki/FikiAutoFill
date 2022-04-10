@@ -1,7 +1,6 @@
 ﻿using DocAutoFill.DataTableConvert;
 using DocAutoFill.DocAutoFiller;
 using DocAutoFill.Readers;
-using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows.Forms;
 
 namespace DocAutoFill
 {
@@ -53,27 +53,64 @@ namespace DocAutoFill
         private object _selectedItem = new object();
         #endregion
 
+        #region Settings
+        public Settings Settings
+        {
+            get
+            {
+                return _settings;
+            }
+            set
+            {
+                _settings = value;
+                SetProperty(value);
+            }
+
+        }
+
+        private Settings _settings = new Settings();
+        #endregion
+
         #region Commands
-        public Command OpenFileExplorerCommand { get; }
+        public Command OpenFileCommand { get; }
         public Command FillCommand { get; }
         public Command OpenAboutCommand { get; }
+        public Command ChangeOutputDirectoryCommand { get; }
         #endregion
 
         #region Constructor
         public MainViewModel()
         {
-            OpenFileExplorerCommand = new Command(OpenFileExplorer);
+            OpenFileCommand = new Command(OpenFile);
+            ChangeOutputDirectoryCommand = new Command(ChangeOutputDirectory);
             FillCommand = new Command(Fill);
             OpenAboutCommand = new Command(OpenAbout);
         }
         #endregion
 
         #region Open Methods
-        private void OpenFileExplorer()
+        private string OpenFileExplorer()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true)
-                OpenCSV(openFileDialog.FileName);
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+                return openFileDialog.FileName;
+            else return null;
+        }
+        private string OpenDirectoryExplorer()
+        {
+            var openFileDialog = new FolderBrowserDialog();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+                return openFileDialog.SelectedPath;
+            else return null;
+        }
+
+        private void OpenFile()
+        {
+            OpenCSV(OpenFileExplorer());
+        }
+        private void ChangeOutputDirectory()
+        {
+            Settings.OutputDir = OpenDirectoryExplorer();
         }
         private void OpenAbout()
         {

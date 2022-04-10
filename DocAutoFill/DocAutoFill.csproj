@@ -4,11 +4,8 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>True</UseWindowsForms>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Settings\" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Aspose.Words" Version="22.4.0" />
