@@ -76,6 +76,7 @@ namespace DocAutoFill
         public Command FillCommand { get; }
         public Command OpenAboutCommand { get; }
         public Command ChangeOutputDirectoryCommand { get; }
+        public Command ChangeInputDirectoryCommand { get; }
         #endregion
 
         #region Constructor
@@ -83,6 +84,7 @@ namespace DocAutoFill
         {
             OpenFileCommand = new Command(OpenFile);
             ChangeOutputDirectoryCommand = new Command(ChangeOutputDirectory);
+            ChangeInputDirectoryCommand = new Command(ChangeInputDirectory);
             FillCommand = new Command(Fill);
             OpenAboutCommand = new Command(OpenAbout);
         }
@@ -112,6 +114,10 @@ namespace DocAutoFill
         {
             Settings.OutputDir = OpenDirectoryExplorer();
         }
+        private void ChangeInputDirectory()
+        {
+            Settings.InputFile = OpenFileExplorer();
+        }
         private void OpenAbout()
         {
             Process.Start(new ProcessStartInfo() { UseShellExecute = true, FileName = "https://github.com/VillyFiki" });
@@ -133,8 +139,10 @@ namespace DocAutoFill
 
                 var codes = row.GetAutoFillCodes();
 
-                var autoFill = new AutoFill(@"F:\test.docx");
+                var autoFill = new AutoFill(Settings.InputFile, Settings.OutputDir);
                 autoFill.Fill(codes);
+
+                MessageBox.Show("Filled");
             }
         }
     }

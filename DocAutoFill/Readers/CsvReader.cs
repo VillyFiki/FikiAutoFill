@@ -10,6 +10,7 @@ namespace DocAutoFill.Readers
     public class CsvReader : IReader
     {
         private string _fileName;
+        private string _outputDir;
 
         public CsvReader(string fileName)
         {

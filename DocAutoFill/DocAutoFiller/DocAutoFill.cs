@@ -12,11 +12,14 @@ namespace DocAutoFill.DocAutoFiller
     public class AutoFill
     {
         private string _fileName { get; set; }
-        public AutoFill(string fileName)
+        private string _outputDir { get; set; }
+        public AutoFill(string fileName, string outputDir)
         {
             if (File.Exists(fileName))
                 _fileName = fileName;
             else throw new FileNotFoundException();
+
+            _outputDir = outputDir;
         }
 
         public void Fill(IEnumerable<AutoFillCode> codes)
@@ -24,7 +27,7 @@ namespace DocAutoFill.DocAutoFiller
             var fileName = Path.GetFileNameWithoutExtension(_fileName);
             FileInfo file = new FileInfo(_fileName);
             AutoFillCode[] codesArray = (AutoFillCode[])codes;
-            var path = Path.Combine(file.Directory.FullName, Path.GetFileNameWithoutExtension(file.Name) + "-" + codesArray[0].TableName + file.Extension);
+            var path = Path.Combine(_outputDir, Path.GetFileNameWithoutExtension(file.Name) + "-" + codesArray[0].TableName + file.Extension);
             File.Copy(_fileName, path);
 
             using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(path, true))

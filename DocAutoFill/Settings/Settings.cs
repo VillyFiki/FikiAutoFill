@@ -1,11 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace DocAutoFill
 {
     public class Settings : ViewModel
     {
+        public string InputFile
+        {
+            get
+            {
+                return _inputFile;
+            }
+            set
+            {
+                _inputFile = value;
+                SetProperty(value);
+            }
+
+        }
+        private string _inputFile;
+
         public string OutputDir
         {
             get
@@ -19,7 +35,7 @@ namespace DocAutoFill
             }
 
         }
-        private string _outputDir;
+        private string _outputDir = Directory.GetCurrentDirectory();
 
         public string OutputType
         {
