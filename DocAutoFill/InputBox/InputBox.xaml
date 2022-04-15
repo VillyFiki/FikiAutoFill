@@ -33,7 +33,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Label Grid.Column="0" Grid.Row="0">Test</Label>
+        <Label Name="inputText" Grid.Column="0" Grid.Row="0" Content="Test" />
         <TextBox Name="resultText" Grid.Column="1" Grid.Row="0" />
 
         <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">

@@ -29,7 +29,7 @@ namespace DocAutoFill.Readers
 
             var dicts = new List<AutoFillDataRow>();
 
-            using (var connection = new SqliteConnection(@"Data Source=F:\test.sqlite"))
+            using (var connection = new SqliteConnection(@"Data Source="+_fileName))
             {
                 connection.Open();
 

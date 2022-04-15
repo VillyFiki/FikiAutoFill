@@ -132,8 +132,11 @@ namespace DocAutoFill
             if (reader.IsRequiersTableName)
             {
                 InputBox.InputBox box = new InputBox.InputBox();
-                if((bool)box.ShowDialog())
+                box.inputText.Content = "Table Name";
+                if ((bool)box.ShowDialog())
+                {
                     reader.TableName = box.resultText.Text;
+                }
 
             }
 
