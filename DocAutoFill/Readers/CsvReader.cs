@@ -2,6 +2,7 @@
 using DocAutoFill.DocAutoFiller;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
@@ -9,8 +10,10 @@ namespace DocAutoFill.Readers
 {
     public class CsvReader : IReader
     {
+        public bool IsRequiersTableName { get; } = false;
+        public string TableName { get; set; }
+
         private string _fileName;
-        private string _outputDir;
 
         public CsvReader(string fileName)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,18 +7,27 @@ namespace DocAutoFill.Readers
 {
     public static class ReaderCreator
     {
-        public static IReader Create(string _fileName)
+        public static IReader Create(string _fileName, string tableName = null)
         {
+            IReader reader = null;
             if (_fileName.EndsWith(".csv"))
             {
-                return new CsvReader(_fileName);
+                reader = new CsvReader(_fileName);
             }
-            if (_fileName.EndsWith(".db"))
+            else if (_fileName.EndsWith(".db"))
             {
-                return new LiteDbReader(_fileName);
+                reader =  new LiteDbReader(_fileName);
+            }
+            else if (_fileName.EndsWith(".sqlite"))
+            {
+                reader = new SqliteReader(_fileName);
+            }
+            else
+            {
+                throw new NotSupportedException("This database not supported");
             }
 
-            throw new Exception();
+            return reader;
         }
     }
 }

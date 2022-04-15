@@ -5,11 +5,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text;
+using System.Windows;
 
 namespace DocAutoFill.Readers
 {
     public class LiteDbReader : IReader
     {
+        public bool IsRequiersTableName { get; } = true;
+        public string TableName { get; set; }
+
         private string _fileName;
 
         public LiteDbReader(string fileName)
@@ -23,11 +27,13 @@ namespace DocAutoFill.Readers
 
         public AutoFillDataRow[] ReadFile()
         {
+            if(TableName == null) return null;
+
             var dicts = new List<AutoFillDataRow>();
 
             using (var db = new LiteDatabase(_fileName))
             {
-                var coll = db.GetCollection("test").FindAll();
+                var coll = db.GetCollection(TableName).FindAll();
 
                 foreach (BsonDocument c in coll)
                 {

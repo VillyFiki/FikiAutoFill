@@ -125,8 +125,18 @@ namespace DocAutoFill
 
         private void OpenCSV(string _fileName)
         {
-            IReader reader = ReaderCreator.Create(_fileName);
+
+            var reader = ReaderCreator.Create(_fileName);
             var converter = new DataTableConverter();
+
+            if (reader.IsRequiersTableName)
+            {
+                InputBox.InputBox box = new InputBox.InputBox();
+                if((bool)box.ShowDialog())
+                    reader.TableName = box.resultText.Text;
+
+            }
+
             DataTable = converter.CreateDataTable(reader.ReadFile()).DefaultView;
         }
         #endregion
