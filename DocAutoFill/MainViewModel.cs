@@ -90,7 +90,7 @@ namespace DocAutoFill
         }
         #endregion
 
-        #region Open Methods
+        #region Explorer Methods
         private string OpenFileExplorer()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -133,20 +133,23 @@ namespace DocAutoFill
             {
                 InputBox.InputBox box = new InputBox.InputBox();
                 box.inputText.Content = "Table Name";
-                if ((bool)box.ShowDialog())
+                foreach (var str in reader.GetTableList())
                 {
-                    reader.TableName = box.resultText.Text;
+                    box.listBox.Items.Add(str);
+                }
+                if (box.ShowDialog().Value)
+                {
+                    reader.TableName = box.listBox.SelectedItem.ToString();
+                    DataTable = converter.CreateDataTable(reader.ReadFile()).DefaultView;
                 }
 
             }
-
-            DataTable = converter.CreateDataTable(reader.ReadFile()).DefaultView;
         }
         #endregion
 
         private void Fill()
         {
-            if(SelectedItem != null)
+            if (SelectedItem != null)
             {
                 AutoFillRow row = new AutoFillRow(SelectedItem);
 

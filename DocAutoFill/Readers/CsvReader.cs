@@ -53,5 +53,10 @@ namespace DocAutoFill.Readers
 
             return _afRow;
         }
+
+        public string[] GetTableList()
+        {
+            return new string[0];
+        }
     }
 }

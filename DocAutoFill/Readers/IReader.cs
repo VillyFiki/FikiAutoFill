@@ -13,5 +13,6 @@ namespace DocAutoFill.Readers
         public bool IsRequiersTableName { get; }
         public string TableName { get; set; }
         public AutoFillDataRow[] ReadFile();
+        public string[] GetTableList();
     }
 }

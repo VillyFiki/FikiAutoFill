@@ -23,13 +23,39 @@ namespace DocAutoFill.Readers
 
             _fileName = fileName;
         }
+        public string[] GetTableList()
+        {
+            var result = new List<string>();
+            using (var connection = new SqliteConnection(@"Data Source=" + _fileName))
+            {
+                connection.Open();
 
+                var command = connection.CreateCommand();
+                command.CommandText =
+                @"SELECT name 
+                    FROM sqlite_master 
+                    WHERE type = 'table'; 
+                ";
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        for (int i = 0; i < reader.VisibleFieldCount; i++)
+                        {
+                            result.Add(reader.GetString(i));
+                        }
+                    }
+                }
+            }
+
+            return result.ToArray();
+        }
         public AutoFillDataRow[] ReadFile()
         {
-
             var dicts = new List<AutoFillDataRow>();
 
-            using (var connection = new SqliteConnection(@"Data Source="+_fileName))
+            using (var connection = new SqliteConnection(@"Data Source=" + _fileName))
             {
                 connection.Open();
 
@@ -52,9 +78,15 @@ namespace DocAutoFill.Readers
                         var dict = new AutoFillDataRow();
 
                         var _row = new List<string>();
-                        for(int i = 0; i < reader.VisibleFieldCount; i++)
+                        for (int i = 0; i < reader.VisibleFieldCount; i++)
                         {
-                            _row.Add(reader.GetString(i));
+                            string strRow = string.Empty;
+                            if (!reader.IsDBNull(i))
+                            {
+                                strRow = reader.GetString(i);
+                            }
+
+                            _row.Add(strRow);
                         }
                         dict.Columns = _columns.ToArray();
                         dict.Row = _row.ToArray();

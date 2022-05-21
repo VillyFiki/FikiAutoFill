@@ -33,7 +33,10 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <DataGrid SelectedItem="{Binding SelectedItem}" IsReadOnly="True" CanUserAddRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" Margin="0,5,0,0" Grid.Row="0" AutoGenerateColumns="True" ItemsSource="{Binding DataTable}" >
+                    <DataGrid ScrollViewer.CanContentScroll="True" 
+                                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                ScrollViewer.HorizontalScrollBarVisibility="Auto" SelectedItem="{Binding SelectedItem}" IsReadOnly="True" CanUserAddRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" Margin="0,5,0,0" Grid.Row="0" AutoGenerateColumns="True" ItemsSource="{Binding DataTable}" >
+                        
                     </DataGrid>
 
                     <Button Content="Start" Margin="3" HorizontalAlignment="Right" Grid.Row="1" Width="65" Height="22" Command="{Binding FillCommand}" />

@@ -14,11 +14,7 @@ namespace DocAutoFill.Readers
             {
                 reader = new CsvReader(_fileName);
             }
-            else if (_fileName.EndsWith(".db"))
-            {
-                reader = new SqliteReader(_fileName);
-            }
-            else if (_fileName.EndsWith(".sqlite"))
+            else if (_fileName.EndsWith(".db") || _fileName.EndsWith(".sqlite"))
             {
                 reader = new SqliteReader(_fileName);
             }
