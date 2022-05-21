@@ -16,7 +16,7 @@ namespace DocAutoFill.Readers
             }
             else if (_fileName.EndsWith(".db"))
             {
-                reader =  new LiteDbReader(_fileName);
+                reader = new SqliteReader(_fileName);
             }
             else if (_fileName.EndsWith(".sqlite"))
             {

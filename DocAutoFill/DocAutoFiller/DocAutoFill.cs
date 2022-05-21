@@ -30,6 +30,7 @@ namespace DocAutoFill.DocAutoFiller
             var path = Path.Combine(_outputDir, Path.GetFileNameWithoutExtension(file.Name) + "-" + codesArray[0].TableName + file.Extension);
             File.Copy(_fileName, path);
 
+
             using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(path, true))
             {
                 string docText = null;
@@ -42,8 +43,43 @@ namespace DocAutoFill.DocAutoFiller
 
                 foreach (var para in paras)
                 {
+                    bool flag = false;
+                    string str = "";
+
+                    foreach (var code in codes)
+                    {
+                        if (!para.InnerText.Contains(code.Code))
+                            break;
+                    }
                     foreach (var run in para.Elements<Run>())
                     {
+
+                        foreach (var text in run.Elements<Text>())
+                        {
+                            if (text.Text.StartsWith('{'))
+                                flag = true;
+                            if (flag)
+                            {
+                                str += text.Text;
+                                text.Text = "";
+                            }
+                            if (str.EndsWith('}'))
+                            {
+                                flag = false;
+                                foreach (var code in codes)
+                                {
+                                    if (str.Contains(code.Code))
+                                    {
+                                        text.Text = code.Name;
+                                        str = "";
+                                    }
+                                }
+                            }
+                            
+
+                        }
+
+
                         foreach (var text in run.Elements<Text>())
                         {
                             foreach (var code in codes)
@@ -121,7 +157,7 @@ namespace DocAutoFill.DocAutoFiller
 
             for (int i = 0; i < _row.Length; i++)
             {
-                codes[i] = new AutoFillCode() { Code = StringToTag(_columns[i]), Name = _row[i] , TableName = _tableName};
+                codes[i] = new AutoFillCode() { Code = StringToTag(_columns[i]), Name = _row[i], TableName = _tableName };
             }
 
             return codes;

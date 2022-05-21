@@ -33,7 +33,7 @@ namespace DocAutoFill.Readers
 
             List<string[]> _lines = new List<string[]>();
             using (var fs = File.OpenRead(_fileName))
-            using (var sr = new StreamReader(fs, Encoding.ASCII))
+            using (var sr = new StreamReader(fs))
             {
                 while (!sr.EndOfStream)
                     _lines.Add(sr.ReadLine().Split(','));
@@ -47,7 +47,7 @@ namespace DocAutoFill.Readers
             {
                 _afRow[i] = new AutoFillDataRow();
                 _afRow[i].Columns = _column;
-                _afRow[i].Row = _lines[i];
+                _afRow[i].Row = _lines[i+1];
                 _afRow[i].TableName = Path.GetFileNameWithoutExtension(_fileName);
             }
 
