@@ -10,18 +10,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace DocAutoFill.InputBox
+namespace DocAutoFill.Boxes.InputTextBox
 {
     /// <summary>
-    /// Логика взаимодействия для InputBox.xaml
+    /// Логика взаимодействия для InputTextWindow.xaml
     /// </summary>
-    public partial class InputBox : Window
+    public partial class InputTextWindow : Window
     {
-        public InputBox()
+        public InputTextWindow()
         {
             InitializeComponent();
         }
-
         public void okButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;

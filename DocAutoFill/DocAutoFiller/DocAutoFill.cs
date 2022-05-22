@@ -22,106 +22,83 @@ namespace DocAutoFill.DocAutoFiller
             _outputDir = outputDir;
         }
 
-        public void Fill(IEnumerable<AutoFillCode> codes)
+        public bool Fill(IEnumerable<AutoFillCode> codes)
         {
             var fileName = Path.GetFileNameWithoutExtension(_fileName);
             FileInfo file = new FileInfo(_fileName);
             AutoFillCode[] codesArray = (AutoFillCode[])codes;
             var path = Path.Combine(_outputDir, Path.GetFileNameWithoutExtension(file.Name) + "-" + codesArray[0].TableName + file.Extension);
-            File.Copy(_fileName, path);
 
-
-            using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(path, true))
+            try
             {
-                string docText = null;
-                var a = wordDoc.MainDocumentPart.Document;
-
-
-                var body = wordDoc.MainDocumentPart.Document.Body;
-                var paras = body.Elements<Paragraph>();
-                var tables = body.Elements<Table>();
-
-                foreach (var para in paras)
+                File.Copy(_fileName, path);
+                using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(path, true))
                 {
-                    bool flag = false;
-                    string str = "";
+                    string docText = null;
+                    var a = wordDoc.MainDocumentPart.Document;
 
-                    foreach (var code in codes)
-                    {
-                        if (!para.InnerText.Contains(code.Code))
-                            break;
-                    }
-                    foreach (var run in para.Elements<Run>())
-                    {
 
-                        foreach (var text in run.Elements<Text>())
+                    var body = wordDoc.MainDocumentPart.Document.Body;
+                    var paras = body.Elements<Paragraph>();
+
+                    foreach (var para in paras)
+                    {
+                        bool flag = false;
+                        string str = "";
+
+                        foreach (var code in codes)
                         {
-                            if (text.Text.StartsWith('{'))
-                                flag = true;
-                            if (flag)
-                            {
-                                str += text.Text;
-                                text.Text = "";
-                            }
-                            if (str.EndsWith('}'))
-                            {
-                                flag = false;
-                                foreach (var code in codes)
-                                {
-                                    if (str.Contains(code.Code))
-                                    {
-                                        text.Text = code.Name;
-                                        str = "";
-                                    }
-                                }
-                            }
-                            
-
+                            if (!para.InnerText.Contains(code.Code))
+                                break;
                         }
-
-
-                        foreach (var text in run.Elements<Text>())
+                        foreach (var run in para.Elements<Run>())
                         {
-                            foreach (var code in codes)
+
+                            foreach (var text in run.Elements<Text>())
                             {
-                                if (text.Text.Contains(code.Code))
+                                if (text.Text.StartsWith('{'))
+                                    flag = true;
+                                if (flag)
                                 {
-                                    text.Text = text.Text.Replace(code.Code, code.Name);
+                                    str += text.Text;
+                                    text.Text = "";
                                 }
-                            }
-                        }
-                    }
-                }
-
-                foreach (var table in tables)
-                {
-                    foreach (var row in table.Elements<TableRow>())
-                    {
-                        foreach (var cell in row.Elements<TableCell>())
-                        {
-                            foreach (var parag in cell.Elements<Paragraph>())
-                            {
-                                foreach (var run in parag.Elements<Run>())
+                                if (str.EndsWith('}'))
                                 {
-                                    foreach (var text in run.Elements<Text>())
+                                    flag = false;
+                                    foreach (var code in codes)
                                     {
-                                        foreach (var code in codes)
+                                        if (str.Contains(code.Code))
                                         {
-                                            if (text.Text.Contains(code.Code))
-                                            {
-                                                text.Text = text.Text.Replace(code.Code, code.Name);
-                                            }
+                                            text.Text = code.Name;
+                                            str = "";
                                         }
                                     }
                                 }
+
+
+                            }
+
+
+                            foreach (var text in run.Elements<Text>())
+                            {
+                                foreach (var code in codes)
+                                {
+                                    if (text.Text.Contains(code.Code))
+                                    {
+                                        text.Text = text.Text.Replace(code.Code, code.Name);
+                                    }
+                                }
                             }
                         }
                     }
+
+                    wordDoc.Save();
                 }
 
-                wordDoc.Save();
+                return true;
             }
-
+            catch { return false; }
         }
     }
 
@@ -169,8 +146,6 @@ namespace DocAutoFill.DocAutoFiller
             {
                 return "{" + str + "}";
             }
-
-
 
             str.Replace(" ", "");
 

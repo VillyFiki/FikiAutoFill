@@ -1,4 +1,6 @@
-﻿using DocAutoFill.DataTableConvert;
+﻿using DocAutoFill.Boxes.InputListBox;
+using DocAutoFill.Boxes.InputTextBox;
+using DocAutoFill.DataTableConvert;
 using DocAutoFill.DocAutoFiller;
 using DocAutoFill.Readers;
 using System;
@@ -51,6 +53,24 @@ namespace DocAutoFill
         }
 
         private object _selectedItem = new object();
+        #endregion
+
+        #region SelectedItem
+        public int SelectedTabIndex
+        {
+            get
+            {
+                return _selectedTabIndex;
+            }
+            set
+            {
+                _selectedTabIndex = value;
+                SetProperty(value);
+            }
+
+        }
+
+        private int _selectedTabIndex;
         #endregion
 
         #region Settings
@@ -131,15 +151,15 @@ namespace DocAutoFill
 
             if (reader.IsRequiersTableName)
             {
-                InputBox.InputBox box = new InputBox.InputBox();
-                box.inputText.Content = "Table Name";
+                InputListBoxWindow box = new InputListBoxWindow();
+                box.TextBoxCaption.Content = "Table Name";
                 foreach (var str in reader.GetTableList())
                 {
-                    box.listBox.Items.Add(str);
+                    box.ListBox.Items.Add(str);
                 }
                 if (box.ShowDialog().Value)
                 {
-                    reader.TableName = box.listBox.SelectedItem.ToString();
+                    reader.TableName = box.ListBox.SelectedItem.ToString();
                     DataTable = converter.CreateDataTable(reader.ReadFile()).DefaultView;
                 }
 
@@ -149,17 +169,28 @@ namespace DocAutoFill
 
         private void Fill()
         {
-            if (SelectedItem != null)
+            if (SelectedItem == null) return;
+            if (Settings.InputFile == null) 
             {
-                AutoFillRow row = new AutoFillRow(SelectedItem);
+                InputTextWindow box = new InputTextWindow();
 
-                var codes = row.GetAutoFillCodes();
-
-                var autoFill = new AutoFill(Settings.InputFile, Settings.OutputDir);
-                autoFill.Fill(codes);
-
-                MessageBox.Show("Filled");
+                if (box.ShowDialog().Value)
+                {
+                    box.TextBoxCaption.Content = "Input File";
+                    Settings.InputFile = box.TextBox.Text;
+                    return;
+                }
             }
+
+            AutoFillRow row = new AutoFillRow(SelectedItem);
+
+            var codes = row.GetAutoFillCodes();
+
+            var autoFill = new AutoFill(Settings.InputFile, Settings.OutputDir);
+            var str = autoFill.Fill(codes) ? "Filled" : "Not Filled";
+
+            MessageBox.Show(str);
+
         }
     }
 }

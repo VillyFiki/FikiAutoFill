@@ -25,7 +25,7 @@
             <MenuItem Header="About" Command="{Binding OpenAboutCommand}"/>
         </Menu>
 
-        <TabControl Grid.Row="1">
+        <TabControl SelectedIndex="{Binding SelectedTabIndex}" Grid.Row="1">
             <TabItem Header="Table">
                 <Grid>
                     <Grid.RowDefinitions>
